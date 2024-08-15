@@ -4,6 +4,8 @@
     {
         // Interface si olan şeyin mutlaka class ı da olmalı
         // CRUD Create (Oluştur), Read (Oku), Update (Güncelle) ve Delete (Sil) , işlemleri için gerekli
+
+        // Dto klasöründe her bir CRUD işlemi için ayrı ayrı sınıflar tanımlayacağız.
         public string CategoryCollectionName { get; set; }
         public string ProductCollectionName { get; set; }
         public string ProductDetailCollectionName { get; set; }
