@@ -23,7 +23,6 @@
     <Folder Include="Controller\" />
     <Folder Include="Dtos\ProductImageDtos\" />
     <Folder Include="Dtos\ProductDetailDtos\" />
-    <Folder Include="Dtos\ProductDtos\" />
   </ItemGroup>
   
 
