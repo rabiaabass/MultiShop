@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MultiShop.Catalog.Dtos.ProductDetailDtos;
 using MultiShop.Catalog.Entities;
@@ -11,11 +12,18 @@ namespace MultiShop.Catalog.Services.ProductDetailServices
     {
         private readonly IMapper _mapper;
         private readonly IMongoCollection<ProductDetail> _productDetailCollection;
-        public ProductDetailService(IMapper mapper, IDatabaseSettings _databaseSettings)
+
+        private readonly IOptions<DatabaseSettings> _databaseSettings;
+        public ProductDetailService(IMapper mapper, /*IDatabaseSettings _databaseSettings*/  IOptionsSnapshot<DatabaseSettings> databaseSettings)
         {
-            var client = new MongoClient(_databaseSettings.ConnectionString);
-            var database = client.GetDatabase(_databaseSettings.DatabaseName);
-           _productDetailCollection = database.GetCollection<ProductDetail>(_databaseSettings.ProductDetailCollectionName); // ProductDetailCollevtionName olması lazım değil mi?
+            // var client = new MongoClient(_databaseSettings.ConnectionString);
+            // var database = client.GetDatabase(_databaseSettings.DatabaseName);
+            //_productDetailCollection = database.GetCollection<ProductDetail>(_databaseSettings.ProductDetailCollectionName); // ProductDetailCollevtionName olması lazım değil mi?
+
+            _databaseSettings = databaseSettings;
+            var client = new MongoClient(_databaseSettings.Value.ConnectionString);
+            var database = client.GetDatabase(_databaseSettings.Value.DatabaseName);
+            _productDetailCollection = database.GetCollection<ProductDetail>(_databaseSettings.Value.ProductDetailCollectionName);
 
             _mapper = mapper;
         }

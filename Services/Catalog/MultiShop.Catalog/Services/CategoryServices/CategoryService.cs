@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using MultiShop.Catalog.Dtos.CategoryDtos;
 using MultiShop.Catalog.Entities;
@@ -13,18 +14,20 @@ namespace MultiShop.Catalog.Services.CategoryServices
         // (Fields) Nedir? Alanlar, bir sınıfın içinde veri depolamak için kullanılır. Bu veriler, sınıfın özelliklerini ve davranışlarını tanımlayan değişkenlerdir
 
         private readonly IMapper _mapper;
+        private readonly IOptions<DatabaseSettings> _databaseSettings;
 
 
         // CategoryService sınıfının Constructor ını oluşturduk aşağıda.
-        public CategoryService(IMapper mapper, IDatabaseSettings _databaseSettings)
-        {   
+        public CategoryService(IMapper mapper, IOptionsSnapshot<DatabaseSettings> databaseSettings)
+        {
             // Bağlantı   client ile bağlantı kurdum veritabanına gittim
             // Database   database ile veritabanına eriştim
             // Tablo    colection ile istediğim tablo vs ulaştım
 
-            var client = new MongoClient(_databaseSettings.ConnectionString); // connectionStringe bağlantı kuracağız burada
-            var database = client.GetDatabase(_databaseSettings.DatabaseName);
-            _categoryCollection = database.GetCollection<Category>(_databaseSettings.CategoryCollectionName);
+            _databaseSettings = databaseSettings;
+            var client = new MongoClient(_databaseSettings.Value.ConnectionString); // connectionStringe bağlantı kuracağız burada
+            var database = client.GetDatabase(_databaseSettings.Value.DatabaseName);
+            _categoryCollection = database.GetCollection<Category>(_databaseSettings.Value.CategoryCollectionName);
             _mapper = mapper;
         }
 
